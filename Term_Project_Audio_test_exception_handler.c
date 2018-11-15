@@ -130,9 +130,10 @@ void interrupt_handler(void)
 	NIOS2_READ_IPENDING(ipending);
 	if (ipending & 0x2)
 	{
+		printf("KEY handler\n");
 		KEY_ISR();
 	}
-	else if (ipending & 0x70) {
+	else if (ipending & 0x40) {
 		AUDIO_ISR();
 	}
 	// else, ignore the interrupt
