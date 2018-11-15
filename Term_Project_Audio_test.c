@@ -11,14 +11,4 @@ int KEY = 0;
 int main()
 {
 
-
-	NIOS2_WRITE_IENABLE(66);
-	NIOS2_WRITE_STATUS(1);
-	*audio_ptr = 3;
-	*(KEY_ptr + 2) = 15;
-
-	while (1) {
-
-	}
-
 }
