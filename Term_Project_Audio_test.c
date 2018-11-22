@@ -8,42 +8,37 @@
 unsigned int fifospace;
 volatile int * audio_ptr = (int *)0xFF203040; // audio port
 volatile int *KEY_ptr = (int*)KEY_BASE;
+volatile int *SDRAM_ptr = SDRAM_BASE;
+volatile int *TIMER_ptr = (int*)TIMER_BASE;
+
 volatile int KEY = 0;
-volatile int *SDRAM_ptr = (int*)SDRAM_BASE;
-int i = 0;
-int size = 10000000;
+
+volatile int i = 0;
+volatile int j = 0;
+
+int size = 4000000;
+
+volatile int timer_value = 100000000 / 44000;
+
+
+
 
 int main()
 {
-	
-	SDRAM_ptr = malloc(sizeof(int)*size);
+	SDRAM_ptr = calloc(size, sizeof(int));
+
+	*(KEY_ptr + 2) = 15;
+	*(TIMER_ptr + 1) = 8;
 
 	NIOS2_WRITE_IENABLE(0x3);
 	NIOS2_WRITE_STATUS(1);
-	*(KEY_ptr + 2) = 15;
+
 
 	while (1) {
-		int j = 0;
 		while (KEY == 1) {
 			int sample = *(audio_ptr + 3);
 			*(audio_ptr + 3) = sample;
 			*(audio_ptr + 2) = sample;
 		}
-
-		while (KEY == 2) {
-			int sample = *(audio_ptr + 3);
-			*(SDRAM_ptr + i) = sample;
-			*(SDRAM_ptr + i + 1) = sample;
-			i += 2;
-		}
-
-		while (KEY == 4) {
-			if (j <= i) {
-				*(audio_ptr + 3) = *(SDRAM_ptr + j);
-				*(audio_ptr + 2) = *(SDRAM_ptr + j+1);
-				j += 2;
-			}
-		}
 	}
-
 }

@@ -5,7 +5,7 @@
 void main(void);
 void interrupt_handler(void);
 void KEY_ISR(void);
-//void TIMER_ISR(void);
+void TIMER_ISR(void);
 /* The assembly language code below handles CPU reset processing */
 void the_reset(void) __attribute__((section(".reset")));
 void the_reset(void)
@@ -134,7 +134,7 @@ void interrupt_handler(void)
 	}
 
 	if (ipending & 0x1) {
-		//TIMER_ISR();
+		TIMER_ISR();
 	}
 	// else, ignore the interrupt
 	return;
